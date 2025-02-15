@@ -3,7 +3,7 @@ name: Sync Fork with Upstream
 on:
   schedule:
     - cron: '0 0 * * *'  # Запуск раз в день (в 00:00 UTC)
-  workflow_dispatch:  # Позволяет запустить вручную
+  workflow_dispatch:  # Позволяет запускать вручную
 
 jobs:
   sync:
@@ -19,11 +19,16 @@ jobs:
           git remote add upstream https://github.com/VariantConst/OpenWebUI-Monitor.git
           git fetch upstream
 
+      - name: Configure Git
+        run: |
+          git config --local user.email "ephemeraljoe@gmail.com"
+          git config --local user.name "ephemeral172"
+
       - name: Merge upstream changes
         run: |
           git checkout main
           git merge --allow-unrelated-histories upstream/main -m "Merge latest changes from upstream"
-      
+
       - name: Push changes to fork
         uses: ad-m/github-push-action@v0.8.0
         with:
